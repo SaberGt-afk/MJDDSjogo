@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9b50174fd59df4fa9c9c5050fc73d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reticleManager: {fileID: 777445579}
+  reticleManager: {fileID: 1769588047}
 --- !u!61 &83621570
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -358,17 +358,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &777445579 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8128090018628877817, guid: 21ce24969b0abf24d92fe21626d59f82, type: 3}
-  m_PrefabInstance: {fileID: 1727995927}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc6713795cd0a9a4abb4d705f6ac1205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1255187224
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +552,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8128090018628877816, guid: 21ce24969b0abf24d92fe21626d59f82, type: 3}
   m_PrefabInstance: {fileID: 1727995927}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1769588047 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8128090018628877817, guid: 21ce24969b0abf24d92fe21626d59f82, type: 3}
+  m_PrefabInstance: {fileID: 1727995927}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6713795cd0a9a4abb4d705f6ac1205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
