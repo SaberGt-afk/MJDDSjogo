@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Target : MonoBehaviour
 {
@@ -30,8 +31,14 @@ public class Target : MonoBehaviour
     {
         if (score < scoreToNextScene)
         {
-            Debug.Log("Tentativas esgotadas. Reiniciando cena...");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Debug.Log("Tentativas esgotadas. A reiniciar cena em 5 segundos...");
+            StartCoroutine(RestartSceneAfterDelay(5f));
         }
+    }
+
+    private IEnumerator RestartSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
