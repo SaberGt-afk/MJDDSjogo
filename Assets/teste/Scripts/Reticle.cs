@@ -16,13 +16,18 @@ public class Reticle : MonoBehaviour
     [SerializeField] private float stiffness;
     [SerializeField] float clamp;
 
-
     [Header("Points")]
     [SerializeField] private List<GameObject> points = new List<GameObject>();
     [SerializeField] private List<GameObject> launchPoints = new List<GameObject>();
     private List<Vector3> pointStartPos = new List<Vector3>();
     private GameObject selectedObject;
 
+    [Header("Disparos")]
+    [SerializeField] private int maxShots = 5;
+    private int shotsLeft;
+
+    [Header("Referência ao Target")]
+    [SerializeField] private Target targetScript;
 
     private void Awake()
     {
@@ -31,6 +36,12 @@ public class Reticle : MonoBehaviour
             pointStartPos.Add(point.transform.localPosition);
         }
     }
+
+    private void Start()
+    {
+        shotsLeft = maxShots;
+    }
+
     private void Update()
     {
         if (selectedObject != null)
@@ -47,20 +58,12 @@ public class Reticle : MonoBehaviour
         item.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-
     private void HandlePoint(Vector3 mousePosRelative, float distance, int i, Point point)
     {
-        int dir = 0;
-        if (point.flip)
-            dir = -1;
-        else
-            dir = 1;
-
+        int dir = point.flip ? -1 : 1;
         Vector3 startPos = pointStartPos[i];
-
         float magnitude = (amplitude * distance) / distance;
         float pointIdentity = (startPos.x * magnitude) * dir;
-
         Vector3 targetPos = (mousePosRelative * pointIdentity) * dir;
 
         float lerpTime = (selectAnimTime / pointIdentity) * Time.deltaTime;
@@ -78,9 +81,11 @@ public class Reticle : MonoBehaviour
         this.gameObject.SetActive(true);
         this.transform.position = selected.transform.position;
         selectedObject = selected;
+
         Vector3 mousePos = Input.mousePosition;
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
         Vector3 mousePosRelative = mouseWorldPos - this.transform.position;
+
         for (int i = 0; i < points.Count; i++)
         {
             HandleRotation(points[i].gameObject);
@@ -101,11 +106,25 @@ public class Reticle : MonoBehaviour
 
     private void FireProjectiles()
     {
+        if (shotsLeft <= 0)
+        {
+            Debug.Log("Sem disparos restantes!");
+            return;
+        }
+
         for (int i = 0; i < launchPoints.Count; i++)
         {
             launchPoints[i].GetComponent<ShootProjectile>().FireProjectile();
         }
+
+        shotsLeft--;
+        Debug.Log("Disparos restantes: " + shotsLeft);
         this.gameObject.SetActive(false);
+
+        if (shotsLeft <= 0)
+        {
+            targetScript.CheckEndCondition(); // Verifica se ganhou ou perdeu
+        }
     }
 
     private int count = 0;
