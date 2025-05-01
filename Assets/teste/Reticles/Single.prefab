@@ -328,6 +328,8 @@ MonoBehaviour:
   - {fileID: 8128090017774324351}
   launchPoints:
   - {fileID: 8128090018259301068}
+  maxShots: 5
+  targetScript: {fileID: 0}
 --- !u!1 &8128090018734820532
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +508,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.51, y: 1.51}
+  m_Size: {x: 10.8, y: 7.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
