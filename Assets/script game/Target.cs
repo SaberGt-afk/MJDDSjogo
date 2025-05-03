@@ -7,6 +7,9 @@ public class Target : MonoBehaviour
     private int score = 0;
     public int scoreToNextScene = 50;
 
+    public GameObject pngImage; // PNG no canvas (arrastar no inspector)
+    public float delayBeforeSceneChange = 2f; // tempo para mostrar imagem
+
     public void AddScore(int value)
     {
         score += value;
@@ -14,8 +17,20 @@ public class Target : MonoBehaviour
 
         if (score >= scoreToNextScene)
         {
-            SceneManager.LoadScene("level 2");
+            StartCoroutine(ShowPNGThenLoadScene());
         }
+    }
+
+    private IEnumerator ShowPNGThenLoadScene()
+    {
+        if (pngImage != null)
+        {
+            pngImage.SetActive(true); // mostra o PNG
+        }
+
+        yield return new WaitForSeconds(delayBeforeSceneChange); // espera X segundos
+
+        SceneManager.LoadScene("level 2");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
