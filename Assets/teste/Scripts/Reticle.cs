@@ -23,11 +23,14 @@ public class Reticle : MonoBehaviour
     private GameObject selectedObject;
 
     [Header("Disparos")]
-    [SerializeField] private int maxShots = 5;
-    private int shotsLeft;
+    [Tooltip("Número de tentativas disponíveis no início")]
+    public int shotsLeft = 5;  // Editável no Inspector
 
     [Header("Referência ao Target")]
     [SerializeField] private Target targetScript;
+
+    [Header("UI")]
+    [SerializeField] private UIManager uiManager; // Arrasta o GameObject com UIManager
 
     private void Awake()
     {
@@ -39,7 +42,11 @@ public class Reticle : MonoBehaviour
 
     private void Start()
     {
-        shotsLeft = maxShots;
+        // Atualiza o texto com o valor inicial de tentativas
+        if (uiManager != null)
+        {
+            uiManager.UpdateTentativas(shotsLeft);
+        }
     }
 
     private void Update()
@@ -118,12 +125,19 @@ public class Reticle : MonoBehaviour
         }
 
         shotsLeft--;
+
         Debug.Log("Disparos restantes: " + shotsLeft);
+
+        if (uiManager != null)
+        {
+            uiManager.UpdateTentativas(shotsLeft); // Atualiza o texto do UI
+        }
+
         this.gameObject.SetActive(false);
 
         if (shotsLeft <= 0)
         {
-            targetScript.CheckEndCondition(); // Verifica se ganhou ou perdeu
+            targetScript.CheckEndCondition();
         }
     }
 
@@ -132,14 +146,12 @@ public class Reticle : MonoBehaviour
     {
         Vector3 currentPos = item.transform.localPosition;
         float elapsed = 0f;
-        float distance = Vector3.Distance(currentPos, pos);
         float ratio = 0;
         while (ratio < 1)
         {
             elapsed += Time.fixedDeltaTime;
             float offset = animCurve.Evaluate(ratio);
-            float newOffset = offset - ratio;
-            newOffset = newOffset / stiffness;
+            float newOffset = (offset - ratio) / stiffness;
             offset = newOffset + ratio;
             float invertOffset = 1.0f - offset;
             item.transform.localPosition = Vector3.Lerp(currentPos, pos, ratio) * invertOffset;

@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,12 +12,14 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int newScore)
     {
         score = newScore;
-        scoreText.text = "Pontos: " + score;
+        if (scoreText != null)
+            scoreText.text = "Pontos: " + score;
     }
 
     public void UpdateTentativas(int novasTentativas)
     {
         tentativas = novasTentativas;
-        tentativasText.text = "Tentativas: " + tentativas;
+        if (tentativasText != null)
+            tentativasText.text = "Tentativas: " + tentativas;
     }
 }
