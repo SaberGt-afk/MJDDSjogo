@@ -7,8 +7,9 @@ public class Target : MonoBehaviour
     private int score = 0;
     public int scoreToNextScene = 50;
 
-    public GameObject pngImage; // PNG no canvas (arrastar no inspector)
-    public float delayBeforeSceneChange = 2f; // tempo para mostrar imagem
+    public GameObject pngImage;     // imagem de sucesso
+    public GameObject failImage;    // imagem de falha
+    public float delayBeforeSceneChange = 2f;
 
     public void AddScore(int value)
     {
@@ -25,11 +26,10 @@ public class Target : MonoBehaviour
     {
         if (pngImage != null)
         {
-            pngImage.SetActive(true); // mostra o PNG
+            pngImage.SetActive(true);
         }
 
-        yield return new WaitForSeconds(delayBeforeSceneChange); // espera X segundos
-
+        yield return new WaitForSeconds(delayBeforeSceneChange);
         SceneManager.LoadScene("level 2");
     }
 
@@ -47,6 +47,12 @@ public class Target : MonoBehaviour
         if (score < scoreToNextScene)
         {
             Debug.Log("Tentativas esgotadas. A reiniciar cena em 5 segundos...");
+
+            if (failImage != null)
+            {
+                failImage.SetActive(true);
+            }
+
             StartCoroutine(RestartSceneAfterDelay(5f));
         }
     }
