@@ -5,11 +5,10 @@ using System.Collections;
 public class Target : MonoBehaviour
 {
     private int score = 0;
-    private int tentativas = 5; // número de tentativas iniciais
     public int scoreToNextScene = 50;
 
-    public GameObject pngImage;     // imagem de sucesso
-    public GameObject failImage;    // imagem de falha
+    public GameObject pngImage;
+    public GameObject failImage;
     public float delayBeforeSceneChange = 2f;
 
     private UIManager uiManager;
@@ -20,7 +19,6 @@ public class Target : MonoBehaviour
         if (uiManager != null)
         {
             uiManager.UpdateScore(score);
-            uiManager.UpdateTentativas(tentativas);
         }
     }
 
@@ -28,7 +26,7 @@ public class Target : MonoBehaviour
     {
         score += value;
         Debug.Log("Pontuação: " + score);
-        
+
         if (uiManager != null)
         {
             uiManager.UpdateScore(score);
@@ -46,7 +44,6 @@ public class Target : MonoBehaviour
         {
             pngImage.SetActive(true);
         }
-
         yield return new WaitForSeconds(delayBeforeSceneChange);
         SceneManager.LoadScene("level 2");
     }
@@ -57,17 +54,6 @@ public class Target : MonoBehaviour
         {
             AddScore(10);
             Destroy(other.gameObject);
-
-            tentativas--;
-            if (uiManager != null)
-            {
-                uiManager.UpdateTentativas(tentativas);
-            }
-
-            if (tentativas <= 0)
-            {
-                CheckEndCondition();
-            }
         }
     }
 
@@ -75,7 +61,7 @@ public class Target : MonoBehaviour
     {
         if (score < scoreToNextScene)
         {
-            Debug.Log("Tentativas esgotadas. A reiniciar cena em 5 segundos...");
+            Debug.Log("Pontuação insuficiente. A reiniciar cena em 5 segundos...");
 
             if (failImage != null)
             {
@@ -90,5 +76,10 @@ public class Target : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public int GetScore() // Adicionado: Método para obter a pontuação
+    {
+        return score;
     }
 }

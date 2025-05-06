@@ -27,14 +27,13 @@ public class Reticle : MonoBehaviour
     public int shotsLeft = 5;  // Valor editável no Inspector
 
     [Header("Referência ao Target")]
-    [SerializeField] private Target targetScript;
+    [SerializeField] private Target targetScript; // Referência ao Target
 
     [Header("UI")]
-    [SerializeField] private UIManager uiManager; // Arrastar o GameObject com UIManager no Inspector
+    [SerializeField] private UIManager uiManager;
 
     private void Awake()
     {
-        // Guarda as posições iniciais dos pontos
         foreach (GameObject point in points)
         {
             pointStartPos.Add(point.transform.localPosition);
@@ -43,7 +42,6 @@ public class Reticle : MonoBehaviour
 
     private void Start()
     {
-        // Sincroniza o valor inicial de tentativas com o UI Manager
         SyncShotsWithUI();
     }
 
@@ -56,7 +54,6 @@ public class Reticle : MonoBehaviour
         }
     }
 
-    // Sincroniza shotsLeft com o UI Manager
     public void SyncShotsWithUI()
     {
         if (uiManager != null)
@@ -130,14 +127,20 @@ public class Reticle : MonoBehaviour
             return;
         }
 
+        // Verificar se a pontuação máxima foi atingida
+        if (targetScript != null && targetScript.GetScore() >= targetScript.scoreToNextScene)
+        {
+            Debug.Log("Pontuação máxima atingida. Não é possível disparar.");
+            return;
+        }
+
         for (int i = 0; i < launchPoints.Count; i++)
         {
             launchPoints[i].GetComponent<ShootProjectile>().FireProjectile();
         }
 
         shotsLeft--;
-        SyncShotsWithUI(); // Atualiza o UI após cada disparo
-
+        SyncShotsWithUI();
         Debug.Log("Disparos restantes: " + shotsLeft);
 
         this.gameObject.SetActive(false);
