@@ -6,15 +6,15 @@ public class Reticle : MonoBehaviour
 {
     [Header("Animation Settings")]
     [SerializeField] private AnimationCurve animCurve;
-    [SerializeField] private float selectAnimTime;
-    [SerializeField] private float deselectAnimTime;
+    [SerializeField] private float selectAnimTime = 0.5f;
+    [SerializeField] private float deselectAnimTime = 0.7f;
 
     [Header("Drag Settings")]
-    [SerializeField] private float amplitude;
+    [SerializeField] private float amplitude = 0.2f;
 
     [Header("Spring")]
-    [SerializeField] private float stiffness;
-    [SerializeField] float clamp;
+    [SerializeField] private float stiffness = 15.05f;
+    [SerializeField] private float clamp = 2f;
 
     [Header("Points")]
     [SerializeField] private List<GameObject> points = new List<GameObject>();
@@ -24,16 +24,17 @@ public class Reticle : MonoBehaviour
 
     [Header("Disparos")]
     [Tooltip("Número de tentativas disponíveis no início")]
-    public int shotsLeft = 5;  // Editável no Inspector
+    public int shotsLeft = 5;  // Valor editável no Inspector
 
     [Header("Referência ao Target")]
     [SerializeField] private Target targetScript;
 
     [Header("UI")]
-    [SerializeField] private UIManager uiManager; // Arrasta o GameObject com UIManager
+    [SerializeField] private UIManager uiManager; // Arrastar o GameObject com UIManager no Inspector
 
     private void Awake()
     {
+        // Guarda as posições iniciais dos pontos
         foreach (GameObject point in points)
         {
             pointStartPos.Add(point.transform.localPosition);
@@ -42,11 +43,8 @@ public class Reticle : MonoBehaviour
 
     private void Start()
     {
-        // Atualiza o texto com o valor inicial de tentativas
-        if (uiManager != null)
-        {
-            uiManager.UpdateTentativas(shotsLeft);
-        }
+        // Sincroniza o valor inicial de tentativas com o UI Manager
+        SyncShotsWithUI();
     }
 
     private void Update()
@@ -55,6 +53,19 @@ public class Reticle : MonoBehaviour
         {
             StopAllCoroutines();
             Selected(selectedObject);
+        }
+    }
+
+    // Sincroniza shotsLeft com o UI Manager
+    public void SyncShotsWithUI()
+    {
+        if (uiManager != null)
+        {
+            uiManager.UpdateTentativas(shotsLeft);
+        }
+        else
+        {
+            Debug.LogWarning("UI Manager não atribuído no Reticle!");
         }
     }
 
@@ -125,13 +136,9 @@ public class Reticle : MonoBehaviour
         }
 
         shotsLeft--;
+        SyncShotsWithUI(); // Atualiza o UI após cada disparo
 
         Debug.Log("Disparos restantes: " + shotsLeft);
-
-        if (uiManager != null)
-        {
-            uiManager.UpdateTentativas(shotsLeft); // Atualiza o texto do UI
-        }
 
         this.gameObject.SetActive(false);
 
