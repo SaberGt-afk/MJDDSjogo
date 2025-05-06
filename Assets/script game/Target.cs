@@ -13,6 +13,8 @@ public class Target : MonoBehaviour
 
     private UIManager uiManager;
     public static bool hitByLastArrow = false; // Novo booleano estático
+    private bool isGameOver = false; // Nova variável para controlar o fim de jogo
+    private float gameOverDelay = 0.1f; // Pequeno atraso para a derrota
 
     void Start()
     {
@@ -33,8 +35,9 @@ public class Target : MonoBehaviour
             uiManager.UpdateScore(score);
         }
 
-        if (score >= scoreToNextScene)
+        if (score >= scoreToNextScene && !isGameOver) // Verifica se o jogo não acabou
         {
+            isGameOver = true; // Marca o fim de jogo
             StartCoroutine(ShowPNGThenLoadScene());
         }
     }
@@ -61,10 +64,22 @@ public class Target : MonoBehaviour
 
     public void CheckEndCondition()
     {
+        if (isGameOver) return; // Se o jogo já acabou, não faz nada
         hitByLastArrow = false; // Reset no início
 
         if (score < scoreToNextScene)
         {
+            StartCoroutine(DelayedFailCheck()); // Usa a coroutine com atraso
+        }
+    }
+
+    private IEnumerator DelayedFailCheck()
+    {
+        yield return new WaitForSeconds(gameOverDelay); // Espera um pouco
+
+        if (!isGameOver) // Verifica novamente se o jogo não acabou entretanto
+        {
+            isGameOver = true;
             Debug.Log("Pontuação insuficiente. A reiniciar cena em 5 segundos...");
 
             if (failImage != null)

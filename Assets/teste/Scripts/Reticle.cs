@@ -124,6 +124,10 @@ public class Reticle : MonoBehaviour
         if (shotsLeft <= 0)
         {
             Debug.Log("Sem disparos restantes!");
+            if (targetScript != null && targetScript.GetScore() < targetScript.scoreToNextScene)
+            {
+                targetScript.CheckEndCondition();
+            }
             return;
         }
 
