@@ -12,6 +12,7 @@ public class Target : MonoBehaviour
     public float delayBeforeSceneChange = 2f;
 
     private UIManager uiManager;
+    public static bool hitByLastArrow = false; // Novo booleano estático
 
     void Start()
     {
@@ -53,12 +54,15 @@ public class Target : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             AddScore(10);
+            hitByLastArrow = true; // Define como verdadeiro se atingido
             Destroy(other.gameObject);
         }
     }
 
     public void CheckEndCondition()
     {
+        hitByLastArrow = false; // Reset no início
+
         if (score < scoreToNextScene)
         {
             Debug.Log("Pontuação insuficiente. A reiniciar cena em 5 segundos...");
@@ -78,7 +82,7 @@ public class Target : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public int GetScore() // Adicionado: Método para obter a pontuação
+    public int GetScore()
     {
         return score;
     }

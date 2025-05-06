@@ -145,7 +145,7 @@ public class Reticle : MonoBehaviour
 
         this.gameObject.SetActive(false);
 
-        if (shotsLeft <= 0)
+        if (shotsLeft <= 0 && !Target.hitByLastArrow) // Verifica se não acertou
         {
             targetScript.CheckEndCondition();
         }
