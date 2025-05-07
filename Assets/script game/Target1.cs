@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class Target : MonoBehaviour
+public class Target1 : MonoBehaviour
 {
     private int score = 0;
     public int scoreToNextScene = 50;
@@ -12,9 +12,9 @@ public class Target : MonoBehaviour
     public float delayBeforeSceneChange = 2f;
 
     private UIManager uiManager;
-    public static bool hitByLastArrow = false;
-    private bool isGameOver = false;
-    private float gameOverDelay = 0.1f;
+    public static bool hitByLastArrow = false; // Novo booleano estático
+    private bool isGameOver = false; // Nova variável para controlar o fim de jogo
+    private float gameOverDelay = 0.1f; // Pequeno atraso para a derrota
 
     void Start()
     {
@@ -35,9 +35,9 @@ public class Target : MonoBehaviour
             uiManager.UpdateScore(score);
         }
 
-        if (score >= scoreToNextScene && !isGameOver)
+        if (score >= scoreToNextScene && !isGameOver) // Verifica se o jogo não acabou
         {
-            isGameOver = true;
+            isGameOver = true; // Marca o fim de jogo
             StartCoroutine(ShowPNGThenLoadScene());
         }
     }
@@ -49,22 +49,7 @@ public class Target : MonoBehaviour
             pngImage.SetActive(true);
         }
         yield return new WaitForSeconds(delayBeforeSceneChange);
-
-        string currentSceneName = SceneManager.GetActiveScene().name;
-
-        if (currentSceneName == "level 1")
-        {
-            SceneManager.LoadScene("level 2");
-        }
-        else if (currentSceneName == "level 2")
-        {
-            SceneManager.LoadScene("menu");
-        }
-        else
-        {
-            Debug.LogWarning("Cena desconhecida. Carregando cena padrão.");
-            SceneManager.LoadScene("menu");
-        }
+        SceneManager.LoadScene("menu");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -72,27 +57,27 @@ public class Target : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             AddScore(10);
-            hitByLastArrow = true;
+            hitByLastArrow = true; // Define como verdadeiro se atingido
             Destroy(other.gameObject);
         }
     }
 
     public void CheckEndCondition()
     {
-        if (isGameOver) return;
-        hitByLastArrow = false;
+        if (isGameOver) return; // Se o jogo já acabou, não faz nada
+        hitByLastArrow = false; // Reset no início
 
         if (score < scoreToNextScene)
         {
-            StartCoroutine(DelayedFailCheck());
+            StartCoroutine(DelayedFailCheck()); // Usa a coroutine com atraso
         }
     }
 
     private IEnumerator DelayedFailCheck()
     {
-        yield return new WaitForSeconds(gameOverDelay);
+        yield return new WaitForSeconds(gameOverDelay); // Espera um pouco
 
-        if (!isGameOver)
+        if (!isGameOver) // Verifica novamente se o jogo não acabou entretanto
         {
             isGameOver = true;
             Debug.Log("Pontuação insuficiente. A reiniciar cena em 5 segundos...");
