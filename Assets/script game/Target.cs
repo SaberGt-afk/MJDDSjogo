@@ -16,6 +16,8 @@ public class Target : MonoBehaviour
     private bool isGameOver = false;
     private float gameOverDelay = 0.1f;
 
+    private AudioSource hitSound; // Referência para o AudioSource
+
     void Start()
     {
         uiManager = FindObjectOfType<UIManager>();
@@ -23,6 +25,7 @@ public class Target : MonoBehaviour
         {
             uiManager.UpdateScore(score);
         }
+        hitSound = GetComponent<AudioSource>(); // Obtém o AudioSource do alvo
     }
 
     public void AddScore(int value)
@@ -73,6 +76,10 @@ public class Target : MonoBehaviour
         {
             AddScore(10);
             hitByLastArrow = true;
+            if (hitSound != null)
+            {
+                hitSound.Play(); // Toca o som quando a flecha acerta
+            }
             Destroy(other.gameObject);
         }
     }
